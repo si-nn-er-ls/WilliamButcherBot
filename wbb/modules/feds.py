@@ -210,7 +210,7 @@ async def myfeds(client, message):
     if is_feds:
         response_text = "\n\n".join(
             [
-                f"{i + 1}.\n**Fed Name:** {fed['fed_name']}\n**Fed Id:** `{fed['fed_id']}`"
+                f"{i + 1}) **Fed Name:** {fed['fed_name']}\n  **Fed Id:** `{fed['fed_id']}`"
                 for i, fed in enumerate(is_feds)
             ]
         )
