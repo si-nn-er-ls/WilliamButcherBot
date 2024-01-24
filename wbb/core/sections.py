@@ -46,7 +46,7 @@ def section(
                 + bold(key)
                 + (
                     (value[0] + n)
-                    if isinstance(value, list) and value and isinstance(value[0], str)
+                    if isinstance(value, list) and isinstance(value[0], str)
                     else mono(value)
                 )
             )
