@@ -122,22 +122,30 @@ async def info_func(_, message: Message):
 
 @app.on_message(filters.command("chat_info"))
 async def chat_info_func(_, message: Message):
+    splited = message.text.split()
+    if len(splited) == 1:
+        chat = message.chat.id
+    else:
+        chat = splited[1]
+
     try:
-        if len(message.command) > 2:
+        chat = int(chat)
+    except (ValueError, Exception) as ef:
+        if "invalid literal for int() with base 10:" in str(ef):
+            chat = str(chat)
+            if chat.startswith("https://"):
+                chat = "@" + chat.split("/")[-1]
+        else:
             return await message.reply_text(
                 "**Usage:**/chat_info [USERNAME|ID]"
             )
 
-        if len(message.command) == 1:
-            chat = message.chat.id
-        elif len(message.command) == 2:
-            chat = message.text.split(None, 1)[1]
+    m = await message.reply_text("Processing")
 
-        m = await message.reply_text("Processing")
-
+    try:
         info_caption, photo_id = await get_chat_info(chat)
         if not photo_id:
-            return await m.edit(info_caption, disable_web_page_preview=True)
+            return await m.edit_text(info_caption, disable_web_page_preview=True)
 
         photo = await app.download_media(photo_id)
         await message.reply_photo(photo, caption=info_caption, quote=False)
@@ -145,4 +153,4 @@ async def chat_info_func(_, message: Message):
         await m.delete()
         os.remove(photo)
     except Exception as e:
-        await m.edit(e)
+        await m.edit_text(e)
