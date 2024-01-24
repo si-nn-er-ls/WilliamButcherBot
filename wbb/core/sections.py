@@ -40,7 +40,7 @@ def section(
     text = (bold_ul(title) + n) if underline else bold(title) + n
 
     for key, value in body.items():
-        if value is not None:  # Check if value is not None
+        if value is not None:
             text += (
                 indent * w
                 + bold(key)
